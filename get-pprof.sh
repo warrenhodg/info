@@ -78,6 +78,8 @@ mkdir -p "$DIR/$TIMESTAMP"
 echo "kubectl $CONTEXT port-forward $POD $NAMESPACE $LOCAL_PORT:$REMOTE_PORT" &
 kubectl ${CONTEXT} port-forward $POD $NAMESPACE $LOCAL_PORT:$REMOTE_PORT &
 KUBE_PID=$!
+# I'd like something better than sleep to wait until the port forwarding is
+# actually up, but am not sure of the best way to do this from bash
 sleep 10
 
 curl http://127.0.0.1:$LOCAL_PORT/$URLENDPOINT/allocs -o "$DIR/$TIMESTAMP/allocs.pprof"
