@@ -1,0 +1,22 @@
+Prometheus:
+histogram_quantile(0.95, sum(rate(kafka_latency_histogram_bucket[5m])) by (le, kubernetes_pod_name))
+histogram_quantile(0.99, sum(rate(kafka_consumed_message_lag_seconds_bucket[5m])) by (le, app, topic))
+histogram_quantile(0.95, sum(rate(aeris_storage_hbase_operation_duration_seconds_bucket[5m])) by (le, operation, result))
+
+
+Loki:
+count by (execution_application) ({namespace="spinauditlog"} | logfmt | source="orca" | execution_status="SUCCEEDED")
+
+Cloud resource usage
+sum(kube_pod_container_resource_limits_cpu_cores{namespace=~"hadoop|hbase"})
+sum(kube_pod_container_resource_limits_memory_bytes{namespace=~"hadoop|hbase"}) / (1024*1024*1024)
+sum(kube_persistentvolumeclaim_resource_requests_storage_bytes{namespace=~"hadoop|hbase"}) / (1024*1024*1024*1024)
+
+
+Annotations:
+sum(changes(hadoop_namenode_numlivedatanodes[2h]))>0
+
+
+Increase from null:
+sum (max_over_time(spinauditlog_spinauditlog_deployments_total[1m]) or vector(0)) by (release, cluster) - on (release, cluster) group_left sum(max_over_time(spinauditlog_spinauditlog_deployments_total[1m] offset 1m) or vector(0))
+
