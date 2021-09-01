@@ -1,0 +1,33 @@
+---
+pushed by promtail:
+labels:
+  static:
+    - cluster
+    - namespace
+    - job
+    - app
+    - instance / hostname
+    - filename
+loki query language:
+  description:
+    broken down into two parts:
+      - a label matcher, which matches labels like prometheus does
+      - a filter expression for the rest of the line. Operators:
+        - "|= contains string"
+        - "!= does not contain string"
+        - "|~ matches regex"
+        - "!~ does not match regex"
+    examples:
+      - '{app="frontend"} |= "level=debug" |= "path=/api/v1/query"'
+      - '{app="frontend"} |~ "5\d{2}"'
+    supports range vectors:
+      examples:
+        - 'rate({cluster="us-central1"} |= "error: .*" [5m])'
+    supports vector aggregations:
+      examples:
+        - 'sum by(job, instance) (rate({cluster="us-central1"} |= "error" [5m]))'
+config:
+  examples:
+    - github.com/grafana/loki/blob/master/cmd/promtail/promtail-local-config.yaml
+    - github.com/grafana/loki/blob/master/cmd/loki/loki-local-config.yaml
+
