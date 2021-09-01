@@ -1,0 +1,53 @@
+---
+
+gcodes:
+  references:
+    - "https://marlinfw.org/docs/gcode/G000-G001.html"
+  g0:
+    description: Non extrude move
+  G1:
+    description: Extrude move
+    example: |
+      G1 X10 Y20 Z30 F3000 E1
+      Go to x=10mm, y=20mm, z=30mm, feedrate=3.000mm/s extrude=1mm
+  G21:
+    description: Units in mm
+  G90:
+    description: absolute pos
+  G91:
+    description: relative pos
+  G28:
+    description: Auto home
+    params: "[X] [Y] [Z]"
+    example: G28 X Z
+  G29:
+    description: Bed leveling
+  M3:
+    description: Spindle CW, laser on
+  M84:
+    description: Turn motors off
+  M104:
+    description: Hot end temp - do not wait
+    example: M104 S200 
+  M109:
+    description: Hot end temp for multiple extruders with waiting
+    example: M104 S200 T1
+  M140:
+    description: Bed temp - do not wait
+  M190:
+    description: Bed temp - wait
+  M106:
+    description: Fan speed
+    examples:
+      - M106; fan at max speed
+      - M106 S128; Fan to 50% power
+      - M106 S128 P1; Fan no 1 to 50% power
+  M107:
+    description: Fan off
+    examples:
+      - M107; fan off
+      - M107 P1; Fan no 1 off
+  M400:
+    description: Finish moves
+  M117:
+    description: Display led message
