@@ -1,0 +1,1 @@
+k --context cloud-dev -n <namespace> exec -it <pod> -c <container, but can be omitted, which will then use the first one> -- bash

@@ -1,0 +1,11 @@
+cluster: A set of virtual machines each running Kubernetes
+control pane: Manages worker nodes and pods
+deployment: |
+  Represents an application running in your system.
+  It manages how many instances run using ReplicaSets
+job: A pod? that runs to completion, and then stops
+node: A virtual machine in a cluster running Kubernetes
+pod: Set of 1 or more containers running with shared storage and networking
+replicaset: |
+  Manages how many instances of an app are running
+worker node: one that can actually execute containers

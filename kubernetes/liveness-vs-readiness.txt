@@ -1,0 +1,1 @@
+Failing liveness probe will restart the container, whereas failing readiness probe will stop our application from serving traffic.
