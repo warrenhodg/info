@@ -1,0 +1,1 @@
+helm install registry twuni/docker-registry --set service.type=NodePort --set service.nodePort=30500

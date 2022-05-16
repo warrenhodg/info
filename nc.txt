@@ -1,0 +1,3 @@
+Test ports (not on mac): nc -vz <server>
+Test port: nc -vz <server> <port>
+Communicate with port: nc <server> <port>
