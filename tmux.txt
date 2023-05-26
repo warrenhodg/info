@@ -1,1 +1,16 @@
-select-layout even-vertical
+Make panes in a window the same
+  select-layout even-vertical
+  select-layout even-horizontal
+
+Move a pane into an existing window
+  join-pane -t <window>
+
+Move a pane into a new window
+  break-pane
+
+Copy to clipboard:
+  ctrl-b [
+  Navigate to start of stuff to copy
+  Shift-V to start selection
+  navigate to end of stuff to copy
+  y to copy
