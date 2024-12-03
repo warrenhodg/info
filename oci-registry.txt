@@ -1,0 +1,17 @@
+From:
+https://github.com/opencontainers/distribution-spec/blob/main/spec.md#endpoints
+
+To list all items:
+curl ${REGISTRY}/v2/_catalog
+
+To list tags for an item
+curl ${REGISTRY}/v2/<item>/tags/list
+
+To get the manifest for an item
+curl -H"Accept: application/vnd.oci.image.manifest.v1+json" ${REGISTRY}/v2/<item>/manifests/<reference or tag>
+
+To delete the manifest for an item
+curl -XDELETE ${REGISTRY}/v2/<item>/manifests/<reference or tag>
+
+To delete a blob for an item
+curl -XDELETE ${REGISTRY}/v2/<item>/blobs/<sha hash>

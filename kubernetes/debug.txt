@@ -1,0 +1,1 @@
+kubectl run --restart=Never --rm -i --tty debug --image=quay.io/giantswarm/debug -- sh

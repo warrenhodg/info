@@ -1,0 +1,11 @@
+Tricks:
+To force a pod restart, even though only the contents of a config change, use annotation on the pod (not the deployment).
+This effectively changes the definition of the pod, causing a restart.
+
+spec:
+  template:
+    metadata:
+      annotations:
+        checksum/init-config: {{ include (print $.Template.BasePath "/<filename of definition>) . | sha256sum }}
+
+This will render the specified helm file, hash it, and store it in the annotation
