@@ -9,3 +9,7 @@ spec:
         checksum/init-config: {{ include (print $.Template.BasePath "/<filename of definition>) . | sha256sum }}
 
 This will render the specified helm file, hash it, and store it in the annotation
+
+Disable drift detection on a specific resource with this annotation:
+helm.toolkit.fluxcd.io/driftDetection: disabled
+
