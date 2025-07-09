@@ -1,0 +1,65 @@
+1. Create cert, import it into both region of choice and us-east-1
+2. Create Cognito. The callback MUST BE https://<your domain>/oauth2/idpresponse, and there must be a signout url at the same domain
+3. The ALB domain MUST NOT be your domain - use the dedicated cognito one provided, otherwise you end up in an endless redirection loop
+4. From https://docs.aws.amazon.com/eks/latest/userguide/quickstart.html#quickstart-deploy-game%25
+5. Create a clusterConfig
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: web-quickstart
+  region: <region-code>
+
+autoModeConfig:
+  enabled: true
+
+6. Create cluster using above
+eksctl create cluster -f cluster-config.yaml
+
+7. Create IngressClass
+
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: alb
+  annotations:
+    ingressclass.kubernetes.io/is-default-class: "true"
+spec:
+  controller: eks.amazonaws.com/alb
+
+8. Create game-2048
+kubectl create namespace game-2048 --save-config
+kubectl apply -n game-2048 -f https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.8.0/docs/examples/2048/2048_full.yaml
+
+9. Modify ingress - ensure UserPoolDomain is NOT your domain, otherwise you end up in an endless redirect loop
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/auth-idp-cognito: '{"UserPoolArn":"arn:aws:cognito-idp:eu-west-1:158537727602:userpool/eu-west-1_bGJRbR189",
+      "UserPoolClientId":"754kl2cccbqmpv6pi96arnf29u", "UserPoolDomain":"eu-west-1bgjrbr189.auth.eu-west-1.amazoncognito.com"}'
+    alb.ingress.kubernetes.io/auth-on-unauthenticated-request: authenticate
+    alb.ingress.kubernetes.io/auth-scope: openid
+    alb.ingress.kubernetes.io/auth-session-cookie: AWSELBAuthSessionCookie
+    alb.ingress.kubernetes.io/auth-session-timeout: "3600"
+    alb.ingress.kubernetes.io/auth-type: cognito
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:eu-west-1:158537727602:certificate/7770405b-ada7-4f2b-b272-68ae8ed35a21"
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+  name: ingress-2048
+  namespace: game-2048
+spec:
+  ingressClassName: alb
+  rules:
+  - host: vttest.mobiraba.co.za
+    http:
+      paths:
+      - backend:
+          service:
+            name: service-2048
+            port:
+              number: 80
+        path: /
+        pathType: Prefix
